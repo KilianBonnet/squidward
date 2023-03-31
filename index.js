@@ -1,19 +1,18 @@
 const express = require('express');
 const gameManager = require("./game/gameManager");
+const inputManager = require("./logic/inputManager");
 
 const app = express();
 
 app.get('/move', async (req, res) => {
     const boardContent = req.query['b'];
 
-    /*
-     * After this if statement we are sure that boardContent:
-     * - Is not null
-     * - Contains 42 characters
-     * - Contains only 'm','h' and '0', characters
-     */
-    if (boardContent == null || boardContent.length !== 42 || !/^[mh0]+$/.test(boardContent)) {
+    if (!inputManager.isValid(boardContent)) {
         return res.status(400).send("Invalid Format");
+    }
+
+    if(!inputManager.isLegal(boardContent)) {
+        return res.status(400).send("Illegal board");
     }
 
     try {
