@@ -5,8 +5,6 @@ const referee = require("./referee");
  */
 const {setup, nextMove} = require("./monteCarlo");
 
-let lastMove;
-
 function convertEntryToBoard(boardString){
     const board = [];
     for (let i = 0; i < 7; i++) {
@@ -26,22 +24,8 @@ async function askAiToPlay(b) {
         throw new Error("Game finished.");
 
     setup();
-    let result;
-    //TODO: virer le lastMove et mettre le board a la place (modifier monte carlo)
-    if (isFirstMove(b)) {
-        console.log("Empty board");
-        result = await nextMove(null);
-    } else {
-        result = await nextMove(lastMove);
-    }
-    lastMove = result;
-
-    return result;
-}
-
-
-    function isFirstMove(b) {
-    return /^0+$/.test(b);
+    //TODO: update montecarlo pour fonctionner avec un board plutot qu'un lastMove
+    return await nextMove(board);
 }
 
 module.exports = {

@@ -16,7 +16,7 @@ function setup(){
     mcts = new MonteCarlo();
 }
 
-function nextMove(lastMove){
+function nextMove(board){
     return new Promise(function(resolve, reject) {
         if(lastMove ==  null || lastMove === []) {
             resolve([3, 0]); // Haha je suis trop malin
