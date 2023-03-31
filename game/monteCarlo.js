@@ -500,6 +500,5 @@ class Play {
 
 module.exports = {
     nextMove: nextMove,
-    setup: setup,
-    setupLoad:setupLoad
+    setup: setup
 };

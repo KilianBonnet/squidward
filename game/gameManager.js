@@ -1,6 +1,10 @@
 /*
  * Convert the GetEntry to a game board usable by the algorithm.
  */
+const {setup, nextMove} = require("./monteCarlo");
+
+let lastMove;
+
 function convertEntryToBoard(boardString){
     const board = [];
     for (let i = 0; i < 7; i++) {
@@ -14,10 +18,21 @@ function convertEntryToBoard(boardString){
     return board;
 }
 
-function askAiToPlay(b){
+async function askAiToPlay(b) {
     let board = convertEntryToBoard(b);
+    setup();
+    let result;
+    if (isFirstMove(b)) {
+        result = await nextMove(null);
+    } else {
+        result = await nextMove(lastMove);
+    }
+    lastMove = result;
+    return result;
+}
 
-    return 0;
+function isFirstMove(b) {
+    return /^0+$/.test(b);
 }
 
 module.exports = {
