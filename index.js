@@ -7,8 +7,12 @@ app.get('/move', (req, res) => {
     const boardContent = req.query['b'];
 
 
+    try {
+        res.status(200).json({column:askAiToPlay(boardContent)});
+    } catch (e) {
+        res.status(422).json({detail:e.message});
+    }
 
-    res.status(200).json({column:askAiToPlay(boardContent)});
 });
 
 app.listen(3000, () => {
