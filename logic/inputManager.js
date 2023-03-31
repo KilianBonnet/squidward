@@ -15,11 +15,11 @@ function isValid(boardContent){
  * - Has no floating tile
  */
 function isLegal(boardContent){
-    return isHMRatioLegal(boardContent) && areTilesLegal(boardContent);
+    return areTilesLegal(boardContent);
 }
 
 /**
- * [HELPER] This function make sure that there is no floating tile.
+ * This function make sure that there is no floating tile.
  * @param boardContent The game board to check
  * @returns {boolean} Whether or not the there is no floating tile.
  */
@@ -35,20 +35,21 @@ function areTilesLegal(boardContent){
 }
 
 /**
- * [HELPER] Check if the h/m tile ratio is legal
- * @param boardContent The game board to check
- * @returns {boolean} Whether or not the h/m tile ratio is legal
+ * Count the h/m tile ratio
+ * @param boardContent The game board to count tiles
+ * @returns {int} The number of human tile - the number of machine tile
  */
-function isHMRatioLegal(boardContent){
+function countHMRatio(boardContent){
     let mhDelta = 0;
     for (let i = 0; i < boardContent.length; i++) {
-        if(boardContent[i] === 'm') mhDelta++;
-        else if (boardContent[i] === 'h') mhDelta--;
+        if(boardContent[i] === 'm') mhDelta--;
+        else if (boardContent[i] === 'h') mhDelta++;
     }
-    return Math.abs(mhDelta) <= 1;
+    return mhDelta;
 }
 
 module.exports = {
     isValid:isValid,
-    isLegal:isLegal
+    isLegal:isLegal,
+    countHMRatio:countHMRatio
 }

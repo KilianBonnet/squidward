@@ -49,5 +49,5 @@ m h m h h h .
 |-------------|------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 200 (OK)    | JSON | { column : int }   | `Column` contains an integer representing the number of the column to be played, **counted from 1**                                                                                                               |
 | 400         | Text | Error message      | `Invalid Format` : The board string is malformed (empty string, wrong size, bad characters) <br> `Illegal board`: The given board is legal but has an illegal configuration (Wrong h/m tile ratio, floating tile) |
-| 422         | JSON | { detail : string} | The board configuration was not illegal, however the game is at a state that the AI can't handle (game finished, draw game)                                                                                       |
+| 422         | JSON | { detail : string} | The board configuration was not illegal, however the game is at a state that the AI can't handle (game finished, draw game, not the AI Turn)                                                                      |
 
