@@ -10,11 +10,15 @@ app.get('/move', (req, res) => {
      * After this if statement we are sure that boardContent:
      * - Is not null
      * - Contains 42 characters
-     * - Contains only 'm','h' and '0', characters.
+     * - Contains only 'm','h' and '0', characters
      */
     if (boardContent == null || boardContent.length !== 42 || !/^[mh0]+$/.test(boardContent)) {
         return res.status(400).send("Invalid Format");
     }
+
+    // After this if statement we are sure that boardContent is not full
+    if (!boardContent.includes('0'))
+        return res.status(422).send("Game finished.");
 
     try {
         res.status(200).json({column:askAiToPlay(boardContent)});

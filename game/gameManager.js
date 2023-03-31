@@ -1,3 +1,5 @@
+const referee = require("./referee");
+
 /*
  * Convert the GetEntry to a game board usable by the algorithm.
  */
@@ -16,6 +18,9 @@ function convertEntryToBoard(boardString){
 
 function askAiToPlay(b){
     let board = convertEntryToBoard(b);
+
+    if (referee.checkWinner(board))
+        throw new Error("Game finished.");
 
     return 0;
 }
