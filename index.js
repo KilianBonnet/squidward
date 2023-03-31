@@ -16,7 +16,12 @@ app.get('/move', (req, res) => {
         return res.status(400).send("Invalid Format");
     }
 
-    res.status(200).json({column:askAiToPlay(boardContent)});
+    try {
+        res.status(200).json({column:askAiToPlay(boardContent)});
+    } catch (e) {
+        res.status(422).json({detail:e.message});
+    }
+
 });
 
 app.listen(3000, () => {
