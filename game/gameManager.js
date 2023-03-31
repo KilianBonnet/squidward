@@ -27,7 +27,9 @@ async function askAiToPlay(b) {
 
     setup();
     let result;
+    //TODO: virer le lastMove et mettre le board a la place (modifier monte carlo)
     if (isFirstMove(b)) {
+        console.log("Empty board");
         result = await nextMove(null);
     } else {
         result = await nextMove(lastMove);
