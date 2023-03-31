@@ -1,4 +1,5 @@
 const express = require('express');
+const {askAiToPlay} = require("./game/gameManager");
 
 const app = express();
 
@@ -7,9 +8,7 @@ app.get('/move', (req, res) => {
 
 
 
-    res.status(200).json({column:boardContent});
-
-    //res.status(200).json({ column: nextMoveColumn });
+    res.status(200).json({column:askAiToPlay(boardContent)});
 });
 
 app.listen(3000, () => {
