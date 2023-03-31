@@ -9,6 +9,8 @@ function convertEntryToBoard(boardString){
             board[i][j] = boardString[i * 6 + j];
         }
     }
+    console.log("Board string: " + boardString + "\nBoard converted: ");
+    console.log(board);
     return board;
 }
 
