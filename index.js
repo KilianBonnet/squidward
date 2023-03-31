@@ -1,4 +1,5 @@
 const express = require('express');
+const {askAiToPlay} = require("./game/gameManager");
 
 const app = express();
 
@@ -10,7 +11,7 @@ app.get('/move', (req, res) => {
         return res.status(400).send("Invalid Format");
     }
 
-    res.status(200).json({column:boardContent});
+    res.status(200).json({column:askAiToPlay(boardContent)});
 });
 
 app.listen(3000, () => {
