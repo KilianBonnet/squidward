@@ -1,6 +1,10 @@
 # 🔴 Squidward 🟡
-A nodeJS API to solve a Connect4 game.
+### About
+Squidward is a nodeJS REST-API to solve a Connect4 game. Its name comes from the name Squidward from the Spongebob
+Squarepants series where the French name of Squidward is Carlo. Carlo refers to Monte Carlo: the algorithm used
+by our API to solve the Connect4 problem.
 
+### Authors
 - BONNET Kilian
 - LE BIHAN Léo
 - BUQUET Antoine
