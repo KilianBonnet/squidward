@@ -6,7 +6,12 @@ const app = express();
 app.get('/move', (req, res) => {
     const boardContent = req.query['b'];
 
-    // Check if boardContent string contains other character than m h 0 or if boardContent string has not 42 characters
+    /*
+     * After this if statement we are sure that boardContent:
+     * - Is not null
+     * - Contains 42 characters
+     * - Contains only 'm','h' and '0', characters.
+     */
     if (boardContent == null || boardContent.length !== 42 || !/^[mh0]+$/.test(boardContent)) {
         return res.status(400).send("Invalid Format");
     }
