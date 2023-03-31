@@ -1,41 +1,36 @@
-const rows = 6;
-const columns = 7;
-const TIMEOUT = 100;
+const ROWS = 6;
+const COLUMNS = 7;
+const TIMEOUT = 500;
 
-const emptyTile = '0';
-const playerRed = '1';
-const playerYellow = '2';
+const EMPTY_TILE = '0';
+const PLAYER_RED = 'h';
+const PLAYER_YELLOW = 'm';
 
-
-// Store locally the game status
-let gameState;
-let mcts;
-
-function setup(){
-    gameState = Game.start();
-    mcts = new MonteCarlo();
-}
+const referee = require("./referee")
 
 function nextMove(board){
     return new Promise(function(resolve, reject) {
-        if(lastMove ==  null || lastMove === []) {
-            resolve([3, 0]); // Haha je suis trop malin
-            gameState = Game.nextState(gameState, new Play(3,0));
+        // Set up the game according to the game board
+        let gameState = Game.setup(board);
+        let mcts = new MonteCarlo();
+
+        let isFirstPlay = true;
+        for (let c = 0; c < COLUMNS; c++)
+            if(board[c][0] !== EMPTY_TILE)
+                isFirstPlay = false;
+
+        if(isFirstPlay) {
+            resolve([3, 0]);
             return;
         }
 
-        gameState = Game.nextState(gameState, new Play(lastMove[0], lastMove[1]));
-
+        // Run the monte-carlo algorithm
         mcts.runSearch(gameState, TIMEOUT);
-
         let play = mcts.bestPlay(gameState);
-
-        gameState = Game.nextState(gameState, play);
 
         resolve([play.col, play.row]);
     });
 }
-
 
 /**
  * Class representing a node in the search tree.
@@ -66,7 +61,6 @@ class MonteCarloNode {
                 play: play,
                 node: null
             });
-
     }
 
     /**
@@ -204,7 +198,7 @@ class MonteCarlo {
         while (Date.now() < end) {
 
             let node = this.select(state)
-            let winner = Game.winner(node.state)
+            let winner = referee.winner(node.state.board)
 
             if (node.isLeaf() === false && winner === null) {
                 node = this.expand(node);
@@ -226,42 +220,41 @@ class MonteCarlo {
      * @return {Play} The best play, according to the given policy.
      */
     bestPlay(state, policy = "robust") {
-
-        this.makeNode(state)
+        this.makeNode(state);
         //If not all children are expanded, not enough information
         if (this.nodes.get(state.hash()).isFullyExpanded() === false)
-            throw new Error("Not enough information!")
+            throw new Error("Not enough information!");
 
-        let node = this.nodes.get(state.hash())
-        let allPlays = node.allPlays()
-        let bestPlay
+        let node = this.nodes.get(state.hash());
+        let allPlays = node.allPlays();
+        let bestPlay;
 
         // Most visits (robust child)
         if (policy === "robust") {
-            let max = -Infinity
+            let max = -Infinity;
             for (let play of allPlays) {
-                let childNode = node.childNode(play)
+                let childNode = node.childNode(play);
                 if (childNode.n_plays > max) {
-                    bestPlay = play
-                    max = childNode.n_plays
+                    bestPlay = play;
+                    max = childNode.n_plays;
                 }
             }
         }
 
         // Highest winrate (max child)
         else if (policy === "max") {
-            let max = -Infinity
+            let max = -Infinity;
             for (let play of allPlays) {
-                let childNode = node.childNode(play)
-                let ratio = childNode.n_wins / childNode.n_plays
+                let childNode = node.childNode(play);
+                let ratio = childNode.n_wins / childNode.n_plays;
                 if (ratio > max) {
-                    bestPlay = play
-                    max = ratio
+                    bestPlay = play;
+                    max = ratio;
                 }
             }
         }
 
-        return bestPlay
+        return bestPlay;
     }
 
     /**
@@ -273,19 +266,19 @@ class MonteCarlo {
     select(state) {
         let node = this.nodes.get(state.hash())
         while (node.isFullyExpanded() && !node.isLeaf()) {
-            let plays = node.allPlays()
-            let bestPlay
-            let bestUCB1 = -Infinity
+            let plays = node.allPlays();
+            let bestPlay;
+            let bestUCB1 = -Infinity;
             for (let play of plays) {
-                let childUCB1 = node.childNode(play).getUCB1(this.UCB1ExploreParam)
+                let childUCB1 = node.childNode(play).getUCB1(this.UCB1ExploreParam);
                 if (childUCB1 > bestUCB1) {
-                    bestPlay = play
-                    bestUCB1 = childUCB1
+                    bestPlay = play;
+                    bestUCB1 = childUCB1;
                 }
             }
-            node = node.childNode(bestPlay)
+            node = node.childNode(bestPlay);
         }
-        return node
+        return node;
     }
 
     /**
@@ -315,15 +308,14 @@ class MonteCarlo {
      * @return {string} The winner of the terminal game state.
      */
     simulate(node) {
-
-        let state = node.state
-        let winner = Game.winner(state)
+        let state = node.state;
+        let winner = referee.winner(state.board);
 
         while (winner == null) {
             let plays = Game.legalPlays(state);
             let play = plays[Math.floor(Math.random() * plays.length)];
             state = Game.nextState(state, play);
-            winner = Game.winner(state);
+            winner = referee.winner(state.board);
         }
 
         return winner;
@@ -332,18 +324,18 @@ class MonteCarlo {
     /**
      * Phase 4: Backpropagation
      * From given node, propagate plays and winner to ancestors' statistics
-     * @param {MonteCarloNode} node - The node to backpropagate from. Typically leaf.
+     * @param {MonteCarloNode} node - The node to backpropagate from. Typically, leaf.
      * @param {string} winner - The winner to propagate.
      */
     backpropagate(node, winner) {
 
         while (node !== null) {
-            node.n_plays += 1
+            node.n_plays += 1;
             // Parent's choice
-            if (node.state.isPlayer(winner === playerRed ? playerYellow : playerRed)) {
-                node.n_wins += 1
+            if (node.state.isPlayer(winner === PLAYER_RED ? PLAYER_YELLOW : PLAYER_RED)) {
+                node.n_wins += 1;
             }
-            node = node.parent
+            node = node.parent;
         }
     }
 
@@ -383,27 +375,31 @@ class MonteCarlo {
 
 /** Class representing the game. */
 class Game {
-    /** Generate and return the initial game state. */
-    static start() {
-        let newBoard = [];
-        for (let c = 0; c < columns; c++){
+    static setup(board) {
+        let currentBoard = []; // Clone of the board to avoid side effect.
+        let playHistory = [];
+
+        for (let c = 0; c < COLUMNS; c++){
             let column = [];
-            for (let r = 0; r < rows; r++)
-                column.push(emptyTile);
-            newBoard.push(column);
+            for (let r = 0; r < ROWS; r++) {
+                column.push(board[c][r]);
+                if(board[c][r] !== EMPTY_TILE)
+                    playHistory.push(board[c][r]);
+            }
+            currentBoard.push(column);
         }
-        return new State([], newBoard, playerYellow);
-    }
-    static loadGame(savedBoard) {
-        return new State([], savedBoard, playerYellow);
+
+        let currentPlayer = playHistory.length % 2 === 0 ? PLAYER_RED : PLAYER_YELLOW;
+
+        return new State(playHistory, currentBoard, currentPlayer);
     }
 
     /** Return the current player's legal plays from given state. */
     static legalPlays(state) {
         let legalPlays = []
-        for (let col = 0; col < columns; col++) {
-            for (let row = 0; row < rows; row++) {
-                if (state.board[col][row] === emptyTile) {
+        for (let col = 0; col < COLUMNS; col++) {
+            for (let row = 0; row < ROWS; row++) {
+                if (state.board[col][row] === EMPTY_TILE) {
                     legalPlays.push(new Play(col, row));
                     break;
                 }
@@ -418,58 +414,13 @@ class Game {
         newHistory.push(play);
         let newBoard = state.board.map((col) => col.slice());
         newBoard[play.col][play.row] = state.player;
-        let newPlayer = state.player === playerRed ? playerYellow : playerRed;
+        let newPlayer = state.player === PLAYER_RED ? PLAYER_YELLOW : PLAYER_RED;
 
         return new State(newHistory, newBoard, newPlayer);
     }
-
-    /** Return the winner of the game. */
-    static winner(state) {
-        let board = state.board;
-
-
-        // Horizontally check
-        for (let c = 0; c < columns - 3; c++)
-            for (let r = 0; r < rows; r++)
-                if (board[c][r] !== emptyTile)
-                    if (board[c][r] === board[c + 1][r] && board[c][r] === board[c + 2][r] && board[c][r] === board[c + 3][r])
-                        return board[c][r];
-
-        // Vertical check
-        for (let c = 0; c < columns; c++)
-            for (let r = 0; r < rows - 3; r++)
-                if (board[c][r] !== emptyTile)
-                    if (board[c][r] === board[c][r + 1] && board[c][r] === board[c][r + 2] && board[c][r] === board[c][r + 3])
-                        return board[c][r];
-
-        // Diagonal check /
-        for (let c = 0; c < columns - 3; c++)
-            for (let r = 0; r < rows - 3; r++)
-                if (board[c][r] !== emptyTile)
-                    if (board[c][r] === board[c + 1][r + 1] && board[c][r] === board[c + 2][r + 2] && board[c][r] === board[c + 3][r + 3])
-                        return board[c][r];
-
-        // Diagonal check \
-        for (let c = 0; c < columns - 3; c++)
-            for (let r = 3; r < rows; r++)
-                if (board[c][r] !== emptyTile) {
-                    if (board[c][r] === board[c + 1][r - 1] && board[c][r] === board[c + 2][r - 2] && board[c][r] === board[c + 3][r - 3])
-                        return board[c][r];
-                }
-
-        if(boardIsFull(board)) return 0;
-        return null;
-    }
-
 }
 
-function boardIsFull(board) {
-    for (let c = 0; c < columns; c++){
-        for (let r = 0; r < rows; r++)
-            if(board[c][r] === emptyTile) return false
-    }
-    return true;
-}
+
 class State {
     constructor(playHistory, board, player) {
         this.playHistory = playHistory;
@@ -499,6 +450,5 @@ class Play {
 }
 
 module.exports = {
-    nextMove: nextMove,
-    setup: setup
+    nextMove: nextMove
 };

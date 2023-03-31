@@ -1,10 +1,9 @@
 const referee = require("./referee");
+const monteCarlo = require("./monteCarlo");
 
 /*
  * Convert the GetEntry to a game board usable by the algorithm.
  */
-const {setup, nextMove} = require("./monteCarlo");
-
 function convertEntryToBoard(boardString){
     const board = [];
     for (let i = 0; i < 7; i++) {
@@ -20,12 +19,13 @@ function convertEntryToBoard(boardString){
 
 async function askAiToPlay(b) {
     let board = convertEntryToBoard(b);
-    if (referee.checkWinner(board))
+
+    if (referee.winner(board) !== null)
         throw new Error("Game finished.");
 
-    setup();
-    //TODO: update montecarlo pour fonctionner avec un board plutot qu'un lastMove
-    return await nextMove(board);
+    let resultCoordinates = await monteCarlo.nextMove(board);
+    console.log("AI Response with coordinates", resultCoordinates);
+    return resultCoordinates[0];
 }
 
 module.exports = {

@@ -1,9 +1,9 @@
 const express = require('express');
-const {askAiToPlay} = require("./game/gameManager");
+const gameManager = require("./game/gameManager");
 
 const app = express();
 
-app.get('/move', (req, res) => {
+app.get('/move', async (req, res) => {
     const boardContent = req.query['b'];
 
     /*
@@ -16,16 +16,12 @@ app.get('/move', (req, res) => {
         return res.status(400).send("Invalid Format");
     }
 
-    // After this if statement we are sure that boardContent is not full
-    if (!boardContent.includes('0'))
-        return res.status(422).send("Game finished.");
-
     try {
-        res.status(200).json({column:askAiToPlay(boardContent)});
+        let columnToPlay = await gameManager.askAiToPlay(boardContent);
+        res.status(200).json({column: columnToPlay});
     } catch (e) {
-        res.status(422).json({detail:e.message});
+        res.status(422).json({detail: e.message});
     }
-
 });
 
 app.listen(3000, () => {
