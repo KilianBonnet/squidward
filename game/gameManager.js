@@ -1,3 +1,5 @@
+const referee = require("./referee");
+
 /*
  * Convert the GetEntry to a game board usable by the algorithm.
  */
@@ -20,6 +22,9 @@ function convertEntryToBoard(boardString){
 
 async function askAiToPlay(b) {
     let board = convertEntryToBoard(b);
+    if (referee.checkWinner(board))
+        throw new Error("Game finished.");
+
     setup();
     let result;
     if (isFirstMove(b)) {
@@ -28,10 +33,12 @@ async function askAiToPlay(b) {
         result = await nextMove(lastMove);
     }
     lastMove = result;
+
     return result;
 }
 
-function isFirstMove(b) {
+
+    function isFirstMove(b) {
     return /^0+$/.test(b);
 }
 
