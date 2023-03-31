@@ -25,7 +25,7 @@ async function askAiToPlay(b) {
 
     let resultCoordinates = await monteCarlo.nextMove(board);
     console.log("AI Response with coordinates", resultCoordinates);
-    return resultCoordinates[0];
+    return resultCoordinates[0] + 1; // Column index start at 1.
 }
 
 module.exports = {
