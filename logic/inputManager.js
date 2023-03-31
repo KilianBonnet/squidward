@@ -19,7 +19,7 @@ function isLegal(boardContent){
 }
 
 /**
- * This function make sure that there is no floating tile.
+ * [HELPER] This function make sure that there is no floating tile.
  * @param boardContent The game board to check
  * @returns {boolean} Whether or not the there is no floating tile.
  */
@@ -35,7 +35,7 @@ function areTilesLegal(boardContent){
 }
 
 /**
- * Check if the h/m tile ratio is legal
+ * [HELPER] Check if the h/m tile ratio is legal
  * @param boardContent The game board to check
  * @returns {boolean} Whether or not the h/m tile ratio is legal
  */
