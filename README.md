@@ -5,9 +5,9 @@ Squarepants series where the French name of Squidward is Carlo. Carlo refers to 
 by our API to solve the Connect4 problem.
 
 ### Authors
-- BONNET Kilian
-- LE BIHAN Léo
-- BUQUET Antoine
+- [BONNET Kilian](https://github.com/KilianBonnet)
+- [LE BIHAN Léo](https://github.com/LeBihanLeo)
+- [BUQUET Antoine](https://github.com/antoinebqt)
 
 ## Requirements to run the project
 - A computer
