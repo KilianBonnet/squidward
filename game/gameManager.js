@@ -1,10 +1,16 @@
 const referee = require("./referee");
 const monteCarlo = require("./monteCarlo");
 
-/*
- * Convert the GetEntry to a game board usable by the algorithm.
+/**
+ * Convert a given string to a board array
+ * Array is 7x6 with the (i,j) indexes representing column i (0 is left) and row j (0 is bottom)
+ * 
+ * @param {string} boardString 
+ * @returns The board array from the converted string
  */
 function convertEntryToBoard(boardString){
+    console.log("Converting board ...");
+
     const board = [];
     for (let i = 0; i < 7; i++) {
         board[i] = [];
@@ -12,11 +18,14 @@ function convertEntryToBoard(boardString){
             board[i][j] = boardString[i * 6 + j];
         }
     }
-    console.log("Board string: " + boardString + "\nBoard converted: ");
-    console.log(board);
+
     return board;
 }
 
+/**
+ * For a given string b retrieved from the get query parameters,
+ * convert the b query to a board array and ask the ai to compute the move
+ */
 async function askAiToPlay(b) {
     let board = convertEntryToBoard(b);
 

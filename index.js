@@ -2,9 +2,15 @@ const express = require('express');
 const gameManager = require("./game/gameManager");
 const inputManager = require("./logic/inputManager");
 
-const app = express();
+/**
+ * Handle a GET /move request with the board b as parameters 
+ * @param {*} req The HTTP client request
+ * @param {*} res The HTTP server response
+ * @returns Server response
+ */
+async function proceedMoveRequest(req, res) {
+    console.log("\nReceiving /move request");
 
-app.get('/move', async (req, res) => {
     const boardContent = req.query['b'];
 
     if (!inputManager.isValid(boardContent))
@@ -23,8 +29,8 @@ app.get('/move', async (req, res) => {
     } catch (e) {
         res.status(422).json({detail: e.message});
     }
-});
+}
 
-app.listen(3000, () => {
-    console.log('Server started on port 3000...');
-});
+const app = express();                                                  // Create express app
+app.get('/move', async (req, res) => proceedMoveRequest(req, res));     // Handling /move GET requests
+app.listen(3000, () => console.log('Server started on port 3000...'));  // Exposing app on server 3000
