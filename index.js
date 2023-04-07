@@ -24,6 +24,7 @@ function proceedMoveRequest(req, res) {
     if(hmRatio > 1 || hmRatio < 0) return res.status(400).send("Illegal board");
 
     try {
+        inputManager.displayBoard(boardContent);
         let columnToPlay = gameManager.askAiToPlay(boardContent);
         res.status(200).json({column: columnToPlay});
     } catch (e) {

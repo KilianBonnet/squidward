@@ -1,3 +1,7 @@
+const COLUMNS = 7;
+const ROWS = 6;
+const EMPTY_TILE = '0';
+
 /*
  * This function make sure that boardContent:
  * - Is not null
@@ -48,8 +52,23 @@ function countHMRatio(boardContent){
     return mhDelta;
 }
 
+/**
+ * Display the given board string representation as a more graphical board
+ * @param {string} b 
+ */
+function displayBoard(b) {
+    console.log("Board is :")
+    for(let row = ROWS - 1; row >= 0; row--) {
+        let buffer = "";
+        for(let col = 0; col < COLUMNS; col++)
+            buffer += " " + b[col * ROWS + row] === EMPTY_TILE ? "." : b[col * ROWS + row] + " ";
+        console.log(buffer);
+    }
+}
+
 module.exports = {
     isValid:isValid,
     isLegal:isLegal,
-    countHMRatio:countHMRatio
+    countHMRatio:countHMRatio,
+    displayBoard:displayBoard
 }
