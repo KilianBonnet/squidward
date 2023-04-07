@@ -10,11 +10,10 @@ by our API to solve the Connect4 problem.
 - [BUQUET Antoine](https://github.com/antoinebqt)
 
 ## Requirements to run the project
-- A computer
-- NodeJS
+- [NodeJS](https://nodejs.org/en)
 
 ## Run the project
-This project needs the express dependency to be run.
+This project needs the [express](http://expressjs.com/) dependency to be run.
 ```
 >>> npm install
 >>> npm start
