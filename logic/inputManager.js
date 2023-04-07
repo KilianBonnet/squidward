@@ -28,9 +28,6 @@ function isLegal(boardContent){
  * @returns {boolean} Whether or not the there is no floating tile.
  */
 function areTilesLegal(boardContent){
-    const ROWS = 6;
-    const EMPTY_TILE = '0';
-
     for(let i = 0; i < boardContent.length; i++)
         if(i % ROWS !== 0 && boardContent[i] !== EMPTY_TILE && boardContent[i - 1] === EMPTY_TILE)
             return false;
@@ -61,7 +58,7 @@ function displayBoard(b) {
     for(let row = ROWS - 1; row >= 0; row--) {
         let buffer = "";
         for(let col = 0; col < COLUMNS; col++)
-            buffer += " " + b[col * ROWS + row] === EMPTY_TILE ? "." : b[col * ROWS + row] + " ";
+            buffer += " " + (b[col * ROWS + row] == EMPTY_TILE ? "." : b[col * ROWS + row]) + " ";
         console.log(buffer);
     }
 }
