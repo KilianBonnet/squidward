@@ -1,5 +1,5 @@
 const express = require('express');
-const gameManager = require("./game/gameManager");
+const gameManager = require("./logic/gameManager");
 const inputManager = require("./logic/inputManager");
 
 /**
@@ -8,7 +8,7 @@ const inputManager = require("./logic/inputManager");
  * @param {*} res The HTTP server response
  * @returns Server response
  */
-async function proceedMoveRequest(req, res) {
+function proceedMoveRequest(req, res) {
     console.log("\nReceiving /move request");
 
     const boardContent = req.query['b'];
@@ -24,7 +24,7 @@ async function proceedMoveRequest(req, res) {
     if(hmRatio > 1 || hmRatio < 0) return res.status(400).send("Illegal board");
 
     try {
-        let columnToPlay = await gameManager.askAiToPlay(boardContent);
+        let columnToPlay = gameManager.askAiToPlay(boardContent);
         res.status(200).json({column: columnToPlay});
     } catch (e) {
         res.status(422).json({detail: e.message});

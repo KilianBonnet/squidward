@@ -9,27 +9,23 @@ const PLAYER_YELLOW = 'm';
 const referee = require("./referee")
 
 function nextMove(board){
-    return new Promise(function(resolve, reject) {
-        // Set up the game according to the game board
-        let gameState = Game.setup(board);
-        let mcts = new MonteCarlo();
+    // Set up the game according to the game board
+    let gameState = Game.setup(board);
+    let mcts = new MonteCarlo();
 
-        let isFirstPlay = true;
-        for (let c = 0; c < COLUMNS; c++)
-            if(board[c][0] !== EMPTY_TILE)
-                isFirstPlay = false;
+    let isFirstPlay = true;
+    for (let c = 0; c < COLUMNS; c++)
+        if(board[c][0] !== EMPTY_TILE)
+            isFirstPlay = false;
 
-        if(isFirstPlay) {
-            resolve([3, 0]);
-            return;
-        }
+    if(isFirstPlay)
+        return [3, 0];
 
-        // Run the monte-carlo algorithm
-        mcts.runSearch(gameState, TIMEOUT);
-        let play = mcts.bestPlay(gameState);
+    // Run the monte-carlo algorithm
+    mcts.runSearch(gameState, TIMEOUT);
+    let play = mcts.bestPlay(gameState);
 
-        resolve([play.col, play.row]);
-    });
+    return [play.col, play.row];
 }
 
 /**

@@ -1,5 +1,5 @@
-const referee = require("./referee");
-const monteCarlo = require("./monteCarlo");
+const referee = require("../game/referee");
+const monteCarlo = require("../game/monteCarlo");
 
 /**
  * Convert a given string to a board array
@@ -26,13 +26,13 @@ function convertEntryToBoard(boardString){
  * For a given string b retrieved from the get query parameters,
  * convert the b query to a board array and ask the ai to compute the move
  */
-async function askAiToPlay(b) {
+function askAiToPlay(b) {
     let board = convertEntryToBoard(b);
 
     if (referee.winner(board) !== null)
         throw new Error("Game finished.");
 
-    let resultCoordinates = await monteCarlo.nextMove(board);
+    let resultCoordinates = monteCarlo.nextMove(board);
     console.log("AI Response with coordinates", resultCoordinates);
     return resultCoordinates[0] + 1; // Column index start at 1.
 }
