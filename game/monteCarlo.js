@@ -1,6 +1,5 @@
 const ROWS = 6;
 const COLUMNS = 7;
-const TIMEOUT = 500;
 
 const EMPTY_TILE = '0';
 const PLAYER_RED = 'h';
@@ -8,7 +7,7 @@ const PLAYER_YELLOW = 'm';
 
 const referee = require("./referee")
 
-function nextMove(board){
+function nextMove(board, timeout = 1000){
     // Set up the game according to the game board
     let gameState = Game.setup(board);
     let mcts = new MonteCarlo();
@@ -22,9 +21,8 @@ function nextMove(board){
         return [3, 0];
 
     // Run the monte-carlo algorithm
-    mcts.runSearch(gameState, TIMEOUT);
+    mcts.runSearch(gameState, timeout);
     let play = mcts.bestPlay(gameState);
-
     return [play.col, play.row];
 }
 

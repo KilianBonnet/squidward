@@ -1,6 +1,7 @@
 const express = require('express');
 const gameManager = require("./logic/gameManager");
 const inputManager = require("./logic/inputManager");
+const metrics = require("./logic/metrics");
 
 /**
  * Handle a GET /move request with the board b as parameters 
@@ -9,7 +10,7 @@ const inputManager = require("./logic/inputManager");
  * @returns Server response
  */
 function proceedMoveRequest(req, res) {
-    console.log("\nReceiving /move request");
+    console.log("\nReceiving /move GET request");
 
     const boardContent = req.query['b'];
 
@@ -32,6 +33,12 @@ function proceedMoveRequest(req, res) {
     }
 }
 
-const app = express();                                                  // Create express app
-app.get('/move', async (req, res) => proceedMoveRequest(req, res));     // Handling /move GET requests
-app.listen(3000, () => console.log('Server started on port 3000...'));  // Exposing app on server 3000
+if(process.argv[2] && process.argv[2] === '--benchmark') {
+    console.log(metrics.benchmark('random', 20, 5));
+} 
+else {
+    const app = express();                                                           // Create express app
+    app.get('/move', async (req, res) => proceedMoveRequest(req, res));              // Handling /move GET requests
+    app.get('/benchmark', async (req, res) => proceedBenchmarkRequest(req, res));    // Handling /move GET requests
+    app.listen(3000, () => console.log('Server started on port 3000...'));           // Exposing app on server 3000
+}

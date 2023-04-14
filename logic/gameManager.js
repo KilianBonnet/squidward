@@ -9,8 +9,6 @@ const monteCarlo = require("../game/monteCarlo");
  * @returns The board array from the converted string
  */
 function convertEntryToBoard(boardString){
-    console.log("Converting board ...");
-
     const board = [];
     for (let i = 0; i < 7; i++) {
         board[i] = [];
@@ -38,5 +36,6 @@ function askAiToPlay(b) {
 }
 
 module.exports = {
+    convertEntryToBoard:convertEntryToBoard,
     askAiToPlay:askAiToPlay
 }

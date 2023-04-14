@@ -2,8 +2,6 @@ const ROWS = 6;
 const COLUMNS = 7;
 
 const EMPTY_TILE = '0';
-const PLAYER_RED = 'h';
-const PLAYER_YELLOW = 'm';
 
 function nextMove(board){
     let possibleCoordsToPlay = [];
@@ -13,5 +11,9 @@ function nextMove(board){
                 possibleCoordsToPlay.push([col, row]);
                 break;
             }
-    
+    return possibleCoordsToPlay[Math.floor(Math.random() * board.length)];
 }
+
+module.exports = {
+    nextMove:nextMove
+};
