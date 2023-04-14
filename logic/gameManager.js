@@ -30,7 +30,7 @@ function askAiToPlay(b) {
     if (referee.winner(board) !== null)
         throw new Error("Game finished.");
 
-    let resultCoordinates = monteCarlo.nextMove(board);
+    let resultCoordinates = monteCarlo.nextMove(board, 1500, true);
     console.log("AI Response with coordinates", resultCoordinates);
     return resultCoordinates[0] + 1; // Column index start at 1.
 }

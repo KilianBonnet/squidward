@@ -7,7 +7,7 @@ const PLAYER_YELLOW = 'm';
 
 const referee = require("./referee")
 
-function nextMove(board, timeout = 1000){
+function nextMove(board, timeout = 1000, verbose = false){
     // Set up the game according to the game board
     let gameState = Game.setup(board);
     let mcts = new MonteCarlo();
@@ -23,6 +23,10 @@ function nextMove(board, timeout = 1000){
     // Run the monte-carlo algorithm
     mcts.runSearch(gameState, timeout);
     let play = mcts.bestPlay(gameState);
+
+    if(verbose)
+        console.log("nb simulattions:", mcts.getStats(gameState).n_plays);
+
     return [play.col, play.row];
 }
 
