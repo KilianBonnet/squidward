@@ -25,7 +25,7 @@ function nextMove(board, timeout = 1000, verbose = false){
     let play = mcts.bestPlay(gameState);
 
     if(verbose)
-        console.log("nb simulattions:", mcts.getStats(gameState).n_plays);
+        console.log("Nb simulation:", mcts.getStats(gameState).n_plays);
 
     return [play.col, play.row];
 }
