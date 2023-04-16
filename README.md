@@ -45,6 +45,11 @@ cd back
 docker compose up -d
 ```
 
+## Run the project (DockerHub)
+```
+docker run -d --name Squidward -p 3000:3000 estoult/squidward:1.0
+```
+
 
 # Api Documentation
 ## /GET /move?b=<board-content>
