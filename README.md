@@ -11,12 +11,38 @@ by our API to solve the Connect4 problem.
 
 ## Requirements to run the project
 - [NodeJS](https://nodejs.org/en)
+- or [Docker](https://www.docker.com/)
 
-## Run the project
+## Run the project (NodeJS)
 This project needs the [express](http://expressjs.com/) dependency to be run.
+- Go the the backend folder
+```sh
+cd back
 ```
->>> npm install
->>> npm start
+- Install npm dependencies 
+```sh
+npm install
+```
+
+- Start node project 
+```sh
+npm start
+```
+## Run the project (Docker)
+
+- Go the the backend folder
+```sh
+cd back
+```
+
+- Execute the build.sh file to build the docker image
+```sh
+.\build.sh
+```
+
+- Run the backend image as container
+```sh
+docker compose up -d
 ```
 
 

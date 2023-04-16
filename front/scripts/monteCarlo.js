@@ -5,7 +5,7 @@ const EMPTY_TILE = '0';
 const PLAYER_RED = 'h';
 const PLAYER_YELLOW = 'm';
 
-function nextMove(board, timeout = 1000){
+function nextMove(board, timeout = 200){
     board = convertEntryToBoard(board)
     
     // Set up the game according to the game board
