@@ -9,6 +9,11 @@ by our API to solve the Connect4 problem.
 - [LE BIHAN Léo](https://github.com/LeBihanLeo)
 - [BUQUET Antoine](https://github.com/antoinebqt)
 
+
+### Standalone Graphical Version
+If you want to try to play against the AI, a Standalone version can be found [here](https://kilianbonnet.github.io/squidward/front/index.html).<br>
+Note that for better playability AI has 200ms to play instead of 2000ms.
+
 ## Requirements to run the project
 - [NodeJS](https://nodejs.org/en)
 - or [Docker](https://www.docker.com/)
